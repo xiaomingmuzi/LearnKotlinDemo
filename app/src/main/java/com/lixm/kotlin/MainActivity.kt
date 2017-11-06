@@ -3,9 +3,10 @@ package com.lixm.kotlin
 import android.app.Activity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
 class MainActivity : Activity() {
-
+    //    可变的（var）或只读的（val）
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,7 +20,6 @@ class MainActivity : Activity() {
         getStringLength("10000")
         getStringLength(111)
         useFor()
-        useFor1()
         useWhile()
         print_null.text = useWhen("hello") + "\n" + useWhen(100L) + "\n" + useWhen("你好")
         useRange()
@@ -29,6 +29,112 @@ class MainActivity : Activity() {
         diedai()
         useIn()
         useLambda()
+        forList()
+        transform("Red")
+        tryAndCatch()
+        ifNotNull()
+        equalNum()
+        decimalDigitValue('8')
+
+        createArray()
+        printyinhao()
+
+        val x = OuterBar()
+        println("OuterBar中x的值为：${x.x}")
+        val y = x.Baz()
+        y.g()
+
+//        var allByDefault:Int? // 错误：需要显式初始化器，隐含默认 getter 和 setter
+//        println(allByDefault)
+    }
+
+    /**
+     * 原生字符串 使用三个引号（"""）分界符括起来，内部没有转义并且可以包含换行和任何其他字符:
+     */
+    private fun printyinhao() {
+        val text = """
+                 for (c in "foo")
+                 print(c)
+            """
+        println(text)
+
+        val text1 = """
+            |Tell me and I forget
+            |Teach me and I remember
+            |Involve me and I learn
+            |(Benjamin Franklin)
+        """.trimMargin("|")//字符串分割
+        println(text1)
+        val price = """${'$'}9.99"""
+        println(price)
+    }
+
+
+    /**
+     * 创建数组
+     *
+     */
+    fun createArray() {
+        //创建一个Array<String> 初始化为["0","1","4","9","16"]
+        val asc = Array(5, { i -> (i * i).toString() })
+        print("初始化的数组为：")
+        for (item in asc)
+            print("$item ")
+        println()
+    }
+
+    /**
+     * fun check(c: Char) {
+     *if (c == 1) { // 错误：类型不兼容
+     * // ……
+     * }
+     * }
+     * 但是可以显示的把字符转换为Int类型的数字
+     *
+     */
+    fun decimalDigitValue(c: Char): Int {
+        if (c !in '0'..'9')
+            throw IllegalArgumentException("Out of range")
+        return c.toInt() - '0'.toInt()//显式转换为数字
+    }
+
+    /**
+     * 注意数字装箱不必保留同一性
+     * 另一方面，它保留了相等性
+     *
+     */
+    fun equalNum() {
+        val a: Int = 10000
+        println(a === a)//输出true
+        val boxedA: Int? = a
+        val anotherBoxedA: Int? = a
+        println("boxedA：$boxedA  anotherBoxedA：$anotherBoxedA  " +
+                (boxedA == anotherBoxedA) + "  " +//true 它保留了相等性
+                (boxedA === anotherBoxedA))// false 数字装箱不必保留同一性
+    }
+
+    /**
+     * try-catch结构体
+     */
+    fun tryAndCatch() {
+        val result = try {
+            var a = 5
+            var b = "99"
+            val c = a * Integer.parseInt(b)
+//            print("输出结果为：$a * $b= $c")
+        } catch (e: Exception) {
+            e.printStackTrace()
+//            throw Exception(e)
+        }
+        println("计算结果为：$result")
+    }
+
+    /**
+     * If Not Null and Else 的缩写
+     */
+    fun ifNotNull() {
+        val files = File("Test").listFiles()
+        println(files?.size ?: "empty")
     }
 
     abstract class Shape(val sides: List<Double>) {
@@ -40,13 +146,53 @@ class MainActivity : Activity() {
         val isSquare: Boolean
     }
 
-//    class Rectangle(
-//            var height:Double
-//    var length:Double
-//    ):Shape(listOf(height,length,height,length)),RectangleProperties{
-//        override val isSquare: Boolean
-//            get() = length==height
-//    }
+    fun forList() {
+        println("闭区间：")
+        for (i in 1..10) {//闭区间，包含100
+            print("$i ")//1 2 3 4 5 6 7 8 9 10
+        }
+        println()
+        println("半开区间，until：")
+        for (i in 1 until 10) {//半开区间，不包含100
+            print("$i ")//1 2 3 4 5 6 7 8 9
+        }
+        println()
+        println("step：")
+        for (i in 2..10 step 2) {
+            print("$i ")// 2 4 6 8 10
+        }
+        println()
+        println("downTo：")
+        for (i in 10 downTo 1) {// 10 9 8 7 6 5 4 3 2 1
+            print("$i ")
+        }
+        println()
+    }
+
+    /**
+     * 以下类的创建方法为这种的简洁语法
+     *   class Rectangle(height :Double,length:Double){
+     *    val  customHeight=height
+     *     val customLength=length
+    }*/
+    class Rectangle(
+            var height: Double,
+            var length: Double
+    ) : Shape(listOf(height, length, height, length)), RectangleProperties {
+        override val isSquare: Boolean get() = length == height
+        override fun calculateArea(): Double = height * length
+    }
+
+    class Triangle(
+            var sideA: Double,
+            var sideB: Double,
+            var sideC: Double
+    ) : Shape(listOf(sideA, sideB, sideC)) {
+        override fun calculateArea(): Double {
+            val s = perimeter / 2
+            return Math.sqrt(s * (s - sideA) * (s - sideB) * (s - sideC))
+        }
+    }
 
     /**
      * 使用lambda表达式来过滤（filter）和映射（map）集合
@@ -118,11 +264,27 @@ class MainActivity : Activity() {
     }
 
     /**
+     * 返回When表达式
+     *
+     */
+    fun transform(color: String): Int {
+        return when (color) {
+            "Red" -> 0
+            "Green" -> 1
+            "Blue" -> 2
+            else -> throw IllegalArgumentException("Invalid color param value")
+        }
+    }
+
+    /**
      * 使用when表达式
+     *  如果 when 作为一个表达式使用，则必须有 else 分支，
+     *  除非编译器能够检测出所有的可能情况都已经覆盖了。
      */
     fun useWhen(obj: Any): String =
             when (obj) {
-                1 -> "one"
+                in 4..6 -> "Three"
+                1, 2 -> "one"
                 "hello" -> "Greeting"
                 is Long -> "Long"
                 !is String -> "Not a String"
@@ -144,14 +306,16 @@ class MainActivity : Activity() {
 
     fun useFor() {
         val items = listOf<String>("apple", "banana", "kiwi")
+        println("for 使用 in：")
         for (item in items)
-            println("userFor item is $item")
-    }
-
-    fun useFor1() {
-        val items = listOf<String>("apple", "banana", "kiwi")
+            print("$item ")
+        println()
+        println("for 使用indices：")
         for (index in items.indices)
             println("item at $index is ${items[index]}")
+        println("for withIndex：")
+        for ((index, value) in items.withIndex())
+            println("the element at $index is $value")
     }
 
     fun sum(a: Int, b: Int): Int {
