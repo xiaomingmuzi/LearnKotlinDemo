@@ -131,7 +131,8 @@ class OuterBar : Super() {
         fun f() {
             print("B中f()方法")//接口成员默认就是"open"的
         }
-        fun b(){
+
+        fun b() {
             print("B中b()方法")
         }
     }
@@ -140,7 +141,7 @@ class OuterBar : Super() {
      * 同时继承 A 和 B 没问题，并且 a() 和 b() 也没问题因为 C 只继承了每个函数的一个实现。
      * 但是 f() 由 C 继承了两个实现，所以我们必须在 C 中覆盖 f() 并且提供我们自己的实现来消除歧义
      */
-    class C():A(),B{
+    class C() : A(), B {
         //编译器要求覆盖f()
         override fun f() {
             super<A>.f()//调用A.f()
@@ -152,11 +153,37 @@ class OuterBar : Super() {
     /**
      * 用一个抽象成员覆盖一个非抽象的开放成员
      */
-    open class BaseOpen{
-        open fun f(){}
+    open class BaseOpen {
+        open fun f() {}
     }
 
-    abstract class DerivedBase:BaseOpen(){
-         override abstract fun f()
+    abstract class DerivedBase : BaseOpen() {
+        override abstract fun f()
+    }
+}
+
+open class D {}
+class D1 : D() {}
+open class E {
+    open fun D.foo() {
+        println("D.foo in E")
+    }
+
+    open fun D1.foo() {
+        println("D1.foo in E")
+    }
+
+    fun caller(d: D) {
+        d.foo()   // 调用扩展函数
+    }
+}
+
+class E1 : E() {
+    override fun D.foo() {
+        println("D.foo in E1")
+    }
+
+    override fun D1.foo() {
+        println("D1.foo in E1")
     }
 }

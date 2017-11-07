@@ -4,6 +4,8 @@ import android.app.Activity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import kotlin.properties.Delegates
+import com.lixm.kotlin.D as F
 
 class MainActivity : Activity() {
     //    可变的（var）或只读的（val）
@@ -46,6 +48,79 @@ class MainActivity : Activity() {
 
 //        var allByDefault:Int? // 错误：需要显式初始化器，隐含默认 getter 和 setter
 //        println(allByDefault)
+
+        val l = mutableListOf<Int>(1, 2, 3)
+        println("swap置换后：${l.swap(0, 2)}")
+
+        E().caller(F())//D.foo in E
+        E1().caller(F())//D.foo in E1
+        E().caller(D1())//D.foo in E
+
+        val user = User()
+        user.name = "first"//<no name>->first
+        user.name = "second"//first->second
+        user.age=11
+        println(user.age)
+        user.age=14
+        println(user.age)
+
+    }
+
+
+
+    class User {
+        var name: String by Delegates.observable("<no name>") { prop, old, new ->
+            println("$old->$new")
+        }
+        var age:Int by Delegates.vetoable(10){
+            prop, old, new -> true
+        }
+    }
+
+
+    class D {
+        fun bar() {
+            println("类D中的bar()方法")
+        }
+    }
+
+    class C {
+        fun baz() {
+            println("类C中的baz()方法")
+            val x1 = foo().x //正确，没问题
+            //匿名对象可以用作只在本地和私有作用域中声明的类型。
+            // 如果你使用匿名对象作为公有函数的返回类型或者用作公有属性的类型，
+            // 那么该函数或属性的实际类型会是匿名对象声明的超类型，
+            // 如果你没有声明任何超类型，就会是 Any。在匿名对象中添加的成员将无法访问
+            //val x2=publicFoo().x//错误，未能解析的引用“x”
+        }
+
+        fun D.foo() {
+            bar()//调用D.bar()方法
+            baz()//调用C.baz()方法
+            //对于分发接收者和扩展接收者的成员名字冲突的情况，扩展接收者优先。
+            // 要引用分发接收者的成员你可以使用 限定的 this 语法。
+            toString()        //调用D.toString()
+            this@C.toString() //调用C.toString()
+        }
+
+        /**
+         * 私有函数，所以其返回类型是匿名对象类型
+         */
+        private fun foo() = object {
+            val x: String = "x"
+        }
+
+        fun publicFoo() = object {
+            val x: String = "x"
+        }
+    }
+
+    fun <T> MutableList<T>.swap(index1: Int, index2: Int): T {
+        val tmp = this[index1]//this 对应该列表   this[0]对应集合中下标为0的值，为1
+        this[index1] = this[index2]
+        this[index2] = tmp
+        return this[index1]
     }
 
     /**
