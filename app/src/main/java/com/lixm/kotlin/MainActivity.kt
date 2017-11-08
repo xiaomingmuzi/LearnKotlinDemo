@@ -5,7 +5,7 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import kotlin.properties.Delegates
-import com.lixm.kotlin.D as F
+import com.lixm.kotlin.D as F  //当前类中已有D类，再次引入时，需要重现明明
 
 class MainActivity : Activity() {
     //    可变的（var）或只读的（val）
@@ -63,6 +63,8 @@ class MainActivity : Activity() {
         println(user.age)
         user.age=14
         println(user.age)
+
+        VarDecla()
 
     }
 
