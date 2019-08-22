@@ -1,8 +1,16 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+//为了解决data数据类型，默认被编译成final类型的数据
+apply plugin: 'kotlin-noarg'
+apply plugin: 'kotlin-allopen'
+
+noArg{
+    annotation("com.lixm.kotlin.annotation.Poco")
+}
+allOpen{
+    annotation("com.lixm.kotlin.annotation.Poco")
+}
 
 android {
     compileSdkVersion 26
@@ -40,4 +48,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    //为了解决data数据类型，默认被编译成final类型的数据
+//    Kotlin整合SpringBoot的默认无参构造函数，默认把所有的类设置open类插件
+    implementation "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
 }
