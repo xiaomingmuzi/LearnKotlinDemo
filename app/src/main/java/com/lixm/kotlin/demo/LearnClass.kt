@@ -1,4 +1,4 @@
-package com.lixm.kotlin
+package com.lixm.kotlin.demo
 
 import android.content.Context
 import android.util.AttributeSet
