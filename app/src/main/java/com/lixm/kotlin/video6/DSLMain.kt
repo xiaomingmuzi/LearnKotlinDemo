@@ -1,7 +1,10 @@
 package com.lixm.kotlin.video6
 
 /**
- * Describe:特定域语言 DSL 编写 HTML 代码
+ * Describe:特定域语言 DSL 编写 HTML 代码，运行结果为：
+ * <Html id="render" ><head></head></Html>
+ * <html id="render" ><head></head></html>
+ * <html id="html" ><head id="headId" ></head><body id="blockID" ></body><body id="bodyID" hclass="class" ><a href="http://www.baidu.com" >百度 地址</a></body></html>
  *
  * Author: Lixm
  * Date: 2019/8/26

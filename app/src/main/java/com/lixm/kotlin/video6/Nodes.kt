@@ -18,7 +18,7 @@ fun html(block: Tag.() -> Unit): Tag {
  * 一定要是Tag的扩展方法，并添加到 children
  */
 fun Tag.head(block: Head.() -> Unit) {
-    this@head + Head().apply(block)
+    this+ Head().apply(block) // 由这个 this@head + Head().apply(block) 省略，不会有冲突问题
 }
 
 fun Tag.body(block: Body.() -> Unit) {
