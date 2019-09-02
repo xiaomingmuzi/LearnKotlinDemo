@@ -5,10 +5,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-noarg'
 apply plugin: 'kotlin-allopen'
 
-noArg{
+noArg {
     annotation("com.lixm.kotlin.annotation.Poco")
 }
-allOpen{
+allOpen {
     annotation("com.lixm.kotlin.annotation.Poco")
 }
 
@@ -54,4 +54,6 @@ dependencies {
 //    Kotlin整合SpringBoot的默认无参构造函数，默认把所有的类设置open类插件
     implementation "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 }
