@@ -10,12 +10,10 @@ import kotlin.coroutines.EmptyCoroutineContext
  * Author: Lixm
  * Date: 2019/8/30
  */
-class BaseCompletion : Continuation<Unit> {
-
-    override val context: CoroutineContext = EmptyCoroutineContext
+class ContextContinuation(override val context:CoroutineContext=EmptyCoroutineContext) : Continuation<Unit> {
 
     override fun resumeWith(result: Result<Unit>) {
-
+        println("BaseCompletion : resumeWith")
     }
 
 }
